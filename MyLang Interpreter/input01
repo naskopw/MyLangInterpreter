@@ -1,0 +1,8 @@
+42
+int x = 442;
+int y = 4;
+int x = 442
+int y = 4
+int Print (){
+return x + 3;
+}
