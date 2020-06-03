@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import error_handling.ErrorHandler;
 import error_handling.Fatal;
 import error_handling.MessageTemplater;
+import prelexer.KeywordAnalyzer;
 import prelexer.SymbolStream;
 import utility.CharUtility;
 
@@ -13,13 +14,16 @@ public class Lexer {
 
 	public TokenStream getTokens() {
 		return new TokenStream(tokens);
+
 	}
 
 	private SymbolStream stream;
+	private KeywordAnalyzer keywordAnalyzer;
 
-	public Lexer(SymbolStream stream) {
+	public Lexer(SymbolStream stream, KeywordAnalyzer keywordAnalyzer) {
 		tokens = new LinkedList<Token>();
 		this.stream = stream;
+		this.keywordAnalyzer = keywordAnalyzer;
 	}
 
 	private void inspectsChar(char c) {
@@ -27,10 +31,16 @@ public class Lexer {
 			return;
 		switch (c) {
 		case '+':
-			createToken(Token.Type.T_PLUS);
+			if (isLongerToken("++"))
+				createToken(Token.Type.T_INCREMENT);
+			else
+				createToken(Token.Type.T_PLUS);
 			break;
 		case '-':
-			createToken(Token.Type.T_MINUS);
+			if (isLongerToken("--"))
+				createToken(Token.Type.T_DECREMENT);
+			else
+				createToken(Token.Type.T_MINUS);
 			break;
 		case '*':
 			createToken(Token.Type.T_STAR);
@@ -39,7 +49,10 @@ public class Lexer {
 			createToken(Token.Type.T_SLASH);
 			break;
 		case '=':
-			createToken(Token.Type.T_EQUALS);
+			if (isLongerToken("=="))
+				createToken(Token.Type.T_DOUBLE_EQUALS);
+			else
+				createToken(Token.Type.T_EQUALS);
 			break;
 		case ';':
 			createToken(Token.Type.T_SEMI);
@@ -50,20 +63,61 @@ public class Lexer {
 		case ')':
 			createToken(Token.Type.T_R_PAREN);
 			break;
+		case ',':
+			createToken(Token.Type.T_COMMA);
+			break;
 		case '{':
 			createToken(Token.Type.T_L_CURRLY_PAREN);
 			break;
 		case '}':
 			createToken(Token.Type.T_R_CURRLY_PAREN);
 			break;
+		case '>':
+			if (isLongerToken(">="))
+				createToken(Token.Type.T_GREATER_EQ);
+			else
+				createToken(Token.Type.T_GREATER_THAN);
+			break;
+		case '<':
+			if (isLongerToken("<="))
+				createToken(Token.Type.T_LESS_EQ);
+			else
+				createToken(Token.Type.T_LESS_THAN);
+			break;
+		case '!':
+			if (isLongerToken("!="))
+				createToken(Token.Type.T_NOT_EQ);
+			else
+				createToken(Token.Type.T_EQUALS);
+			break;
+		case '&':
+			if (isLongerToken("&&"))
+				createToken(Token.Type.T_AND);
+			break;
+		case '|':
+			if (isLongerToken("||"))
+				createToken(Token.Type.T_OR);
+			break;
+		case '[':
+			createToken(Token.Type.T_L_SQ_PAREN);
+			break;
+		case ']':
+			createToken(Token.Type.T_R_SQ_PAREN);
+			break;
 		default:
 			if (Character.isDigit(c)) {
-				createToken(Token.Type.T_INT_LITERAL, Integer.toString(createInteger()));
+				String numLiteral = createNumberLiteral();
+				if (CharUtility.in('.', numLiteral))
+					createToken(Token.Type.T_FLOAT_LITERAL, numLiteral);
+				else
+					createToken(Token.Type.T_INT_LITERAL, numLiteral);
 				break;
 			} else if (CharUtility.isValidIdentiferOrKeyword(c)) {
 				String name = createIdentifier();
-				if (Keyword.is(name)) {
-					createToken(Keyword.get(name));
+				Token keyword = keywordAnalyzer.getKeyword(name);
+
+				if (keyword != null) {
+					createToken(keyword);
 					break;
 				}
 				createToken(Token.Type.T_IDENTIFIER, name);
@@ -80,15 +134,17 @@ public class Lexer {
 		createToken(Token.Type.T_EOF);
 	}
 
-	private int createInteger() {
-		StringBuilder intBuffer = new StringBuilder();
-		intBuffer.append(stream.current());
-		while (stream.hasNext() && Character.isDigit(stream.next())) {
-			intBuffer.append(stream.current());
+	private String createNumberLiteral() {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append(stream.current());
+		while (stream.hasNext() && (Character.isDigit(stream.next()) || stream.current().equals('.'))) {
+			buffer.append(stream.current());
 		}
+
 		if (!Character.isDigit(stream.current()))
 			stream.previous();
-		return Integer.parseInt(intBuffer.toString());
+
+		return buffer.toString();
 	}
 
 	private String createIdentifier() {
@@ -102,6 +158,7 @@ public class Lexer {
 		return identifierBuffer.toString();
 	}
 
+	@Deprecated
 	public void printTokens() {
 		for (Token t : tokens)
 			System.out.println(t);
@@ -117,5 +174,12 @@ public class Lexer {
 
 	private void createToken(Token t) {
 		tokens.add(t);
+	}
+
+	private boolean isLongerToken(String name) {
+		boolean isThatToken = stream.peek().equals(name.charAt(1));
+		if (isThatToken)
+			stream.next();
+		return isThatToken;
 	}
 }

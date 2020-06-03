@@ -8,6 +8,13 @@ public class CharUtility {
 		return false;
 	}
 
+	public static int count(char targetSymbol, String str) {
+		int count = 0;
+		for (int i = 0; i < str.length(); i++)
+			if (str.charAt(i) == targetSymbol) count ++;
+				return count;
+	}
+
 	public static boolean isWhiteSpace(char targetSymbol) {
 		if (in(targetSymbol, WHITESPACES))
 			return true;

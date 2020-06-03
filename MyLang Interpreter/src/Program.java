@@ -2,16 +2,24 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
+import error_handling.ErrorHandler;
+import error_handling.Fatal;
+import error_handling.MessageTemplater;
+import interpreter.Interpreter;
+import interpreter.Interpreter.Mode;
 import lex.Lexer;
-//import parser.Parser;
+import parser.Parser;
+import prelexer.KeywordAnalyzer;
 import prelexer.SymbolStream;
 
 public class Program {
 
+	private static final String SPEC_KEYWORDS_PATH = "res/keywords.json";
+
 	static void usage() {
-		System.out.printf("Usage: java Program \'inputFile\'\n");
-		System.exit(1);
+		ErrorHandler.raise(new Fatal(MessageTemplater.Usage));
 	}
 
 	static SymbolStream scanFile(String filename) {
@@ -20,23 +28,27 @@ public class Program {
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
 			while ((line = reader.readLine()) != null) {
-				inputSymbols.append(line);
+				inputSymbols.append(line + '\n');
 			}
 		} catch (FileNotFoundException e1) {
-			System.err.printf("The input file \'%s\' is not found", filename);
+			ErrorHandler.raise(new Fatal(MessageTemplater.FileNotFound, filename));
 		} catch (IOException e) {
-			System.err.println("IO error occured");
 			e.printStackTrace();
+			ErrorHandler.raise(new Fatal(null));
 		}
 		return new SymbolStream(inputSymbols);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (args.length != 1)
 			usage();
-		Lexer lexer = new Lexer(scanFile(args[0]));
+		KeywordAnalyzer k = new KeywordAnalyzer(SPEC_KEYWORDS_PATH);
+		Lexer lexer = new Lexer(scanFile(args[0]), k);
 		lexer.scan();
-		lexer.printTokens(); //for debug
-		//Parser p = new Parser(lexer.getTokens());
+		Parser p = new Parser(lexer.getTokens());
+		Interpreter interp = new Interpreter();
+		interp.run(p.parse(), Mode.COMPILE);
 	}
+
 }

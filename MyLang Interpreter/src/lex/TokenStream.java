@@ -3,7 +3,7 @@ package lex;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import utility.StreamIterator;
+import common.StreamIterator;
 
 public class TokenStream implements StreamIterator<Token> {
 	private Token current = null;

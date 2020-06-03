@@ -2,6 +2,9 @@ package error_handling;
 
 import prelexer.Position;
 
+//Simple error handling
+//just for debugging
+
 public class ErrorHandler {
 	String msg;
 
@@ -17,5 +20,4 @@ public class ErrorHandler {
 		if (err.type == Error.Type.FATAL_ERROR)
 			System.exit(1);
 	}
-
 }

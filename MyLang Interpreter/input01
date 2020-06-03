@@ -1,8 +1,4 @@
-42
-int x = 442;
-int y = 4;
-int x = 442
-int y = 4
-int Print (){
-return x + 3;
+int main() {
+println (3+2)*3
+print 4.14*2
 }

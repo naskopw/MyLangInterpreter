@@ -1,6 +1,6 @@
 package prelexer;
 
-import utility.StreamIterator;
+import common.StreamIterator;
 
 public class SymbolStream implements StreamIterator<Character> {
 	private final String data;
