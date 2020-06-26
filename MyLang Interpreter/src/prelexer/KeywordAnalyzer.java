@@ -56,6 +56,7 @@ public class KeywordAnalyzer {
 		String key = null;
 		String value = null;
 		String tokenType = null;
+		String valueTypeWithQuotes = null;
 		String valueType = null;
 		for (int i = 0; i < arr.length(); i++) {
 			keywordJSON = arr.getJSONObject(i);
@@ -65,7 +66,8 @@ public class KeywordAnalyzer {
 			tokenType = value;
 			if (value.contains(",")) {
 				tokenType = value.substring(2, value.indexOf(",") - 1);
-				valueType = value.substring(value.indexOf(",") + 1, value.length() - 1);
+				valueTypeWithQuotes = value.substring(value.indexOf(",") + 1, value.length() - 1);
+				valueType = valueTypeWithQuotes.substring(1, valueTypeWithQuotes.length() - 1);
 			}
 			keywords.put(key, new Token(Token.Type.valueOf(tokenType), valueType));
 		}

@@ -1,4 +1,12 @@
-int main() {
-println (3+2)*3
-print 4.14*2
+int main() 
+{
+    for(float i = 0.0;i<10.0;i++)
+    {
+        if (i>=4.0) println i
+    }
+}
+
+int hello()
+{
+    return 0
 }

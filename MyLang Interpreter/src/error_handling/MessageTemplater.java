@@ -13,5 +13,12 @@ public class MessageTemplater {
 	public static final String Usage = "Usage: java Program \'inputFile\'\n";
 	public static final String IncorrectJSON = "Incorrectly formated JSON";
 	public static final String NoEntryPoint = "Cannot find an entry point for the program";
-	public static final String FuncAlreadyDeclared = "Function already declared";
+	public static final String Func = "Function";
+	public static final String Var = "Variable";
+
+	public static final String AlreadyDeclared = " already declared";
+	public static final String FuncAlreadyDeclared = Func + AlreadyDeclared;
+	public static final String VarAlreadyDeclared = Var + AlreadyDeclared;
+	public static final String UndeclaredVar = "Undeclared variable";
+	public static final String TypeMismatch = "Types don't match";
 }

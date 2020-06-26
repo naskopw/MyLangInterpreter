@@ -47,7 +47,7 @@
       "else": "T_ELSE"
     },
     {
-      "float": "T_BOOL_TYPE"
+      "float": "T_FLOAT_TYPE"
     },
     {
       "void": "T_VOID_TYPE"

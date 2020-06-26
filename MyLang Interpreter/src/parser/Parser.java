@@ -3,6 +3,8 @@ package parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.attribute.standard.MediaSize.ISO;
+
 import error_handling.ErrorHandler;
 import error_handling.Fatal;
 import error_handling.MessageTemplater;
@@ -118,9 +120,22 @@ public class Parser {
 			return new ContinueStatement(stream.next().getPosition());
 		case T_BREAK:
 			return new BreakStatement(stream.next().getPosition());
+		case T_IDENTIFIER:
+			return parseAssignOrPostExpression();
 		default:
 			Statement s = parseExpression();
 			return s;
+		}
+	}
+
+	private Statement parseAssignOrPostExpression() {
+		stream.next();
+		if (stream.peek().isOfType(Type.T_INCREMENT) || stream.peek().isOfType(Type.T_DECREMENT)) {
+			stream.previous();
+			return parsePostExpression();
+		} else {
+			stream.previous();
+			return parseAssignExpression();
 		}
 	}
 
@@ -140,11 +155,16 @@ public class Parser {
 		return new BlockStatement(statements, start);
 	}
 
+	private Statement parseAssignExpression() {
+		Token idToken = require(Type.T_IDENTIFIER);
+		require(Type.T_EQUALS);
+		return new AssignExpression(new VarLiteral(new Identifier(idToken.getValue())), parseExpression());
+	}
+
 	private Statement parseVarDeclaration() {
 		Token typeToken = stream.next();
 		language_elements.type_system.Type type = language_elements.type_system.Type
 				.getPrimitiveType(typeToken.getType());
-
 		Token identifierToken = require(Type.T_IDENTIFIER);
 		Identifier identifier = new Identifier(identifierToken.getPosition(), identifierToken.getValue());
 
@@ -200,17 +220,16 @@ public class Parser {
 	private Statement parseForStatement() {
 		Position start = require(Type.T_FOR).getPosition();
 		require(Type.T_L_PAREN);
-
 		Statement init = null;
 		if (!stream.peek().isOfType(Type.T_SEMI))
-			init = varDeclarationOrExpression();
-
+			if (!stream.peek().isOfType(Type.T_IDENTIFIER))
+				init = varDeclarationOrExpression();
+			else init = parseAssignExpression();
 		require(Type.T_SEMI);
 
 		Expression cond = null;
 		if (!stream.peek().isOfType(Type.T_SEMI))
 			cond = parseExpression();
-
 		require(Type.T_SEMI);
 
 		Expression action = null;
@@ -405,7 +424,8 @@ public class Parser {
 			float f = Float.parseFloat(current.getValue());
 			return new FloatLiteral(current.getPosition(), f);
 		case T_BOOL_LITERAL:
-			return new BoolLiteral(current.getPosition(), Boolean.parseBoolean(current.getValue()));
+			BoolLiteral b = new BoolLiteral(current.getPosition(), Boolean.parseBoolean(current.getValue()));
+			return b;
 		case T_IDENTIFIER:
 			if (stream.peek().isOfType(Type.T_L_PAREN)) {
 				require(Type.T_L_PAREN);

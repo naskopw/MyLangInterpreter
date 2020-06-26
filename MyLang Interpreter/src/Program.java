@@ -30,7 +30,7 @@ public class Program {
 			while ((line = reader.readLine()) != null) {
 				inputSymbols.append(line + '\n');
 			}
-		} catch (FileNotFoundException e1) {
+		} catch (FileNotFoundException e) {
 			ErrorHandler.raise(new Fatal(MessageTemplater.FileNotFound, filename));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -46,6 +46,7 @@ public class Program {
 		KeywordAnalyzer k = new KeywordAnalyzer(SPEC_KEYWORDS_PATH);
 		Lexer lexer = new Lexer(scanFile(args[0]), k);
 		lexer.scan();
+		//lexer.printTokens();
 		Parser p = new Parser(lexer.getTokens());
 		Interpreter interp = new Interpreter();
 		interp.run(p.parse(), Mode.COMPILE);
