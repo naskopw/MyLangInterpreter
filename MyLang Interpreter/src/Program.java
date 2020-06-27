@@ -46,7 +46,7 @@ public class Program {
 		KeywordAnalyzer k = new KeywordAnalyzer(SPEC_KEYWORDS_PATH);
 		Lexer lexer = new Lexer(scanFile(args[0]), k);
 		lexer.scan();
-		//lexer.printTokens();
+		lexer.printTokens();
 		Parser p = new Parser(lexer.getTokens());
 		Interpreter interp = new Interpreter();
 		interp.run(p.parse(), Mode.COMPILE);

@@ -1,6 +1,8 @@
 int main() 
 {
-    print "Hello" + " " +"Atanas"
+    string hello = "Hello"
+    string user = "Atanas"
+    println hello+" "+user
 }
 
 int hello()

@@ -34,7 +34,9 @@ public class FunctionExecutor extends CommonVoidVisitor<Object> {
         this.runtime = runtime;
         this.typeChecker = new TypeChecker(runtime);
         FunctionDeclaration func = functions.get("main");
+        runtime.enterScope("main");
         execute(func);
+        runtime.enterScope("main");
 
     }
 
