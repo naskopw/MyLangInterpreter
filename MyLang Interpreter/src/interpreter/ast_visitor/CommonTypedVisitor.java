@@ -150,6 +150,11 @@ public class CommonTypedVisitor<T, A> implements TypedVisitor<T, A> {
     }
 
     @Override
+    public T visit(StringLiteral s, A argument) {
+        return null;
+    }
+
+    @Override
     public T visit(VarLiteral v, A arg) {
         return null;
     }
@@ -168,4 +173,18 @@ public class CommonTypedVisitor<T, A> implements TypedVisitor<T, A> {
         return d.getBody().accept(this, arg);
     }
 
+    @Override
+    public T visit(ArrayDeclaration a, A obj) {
+        for (Expression e : a.getDimensions()) {
+            e.accept(this, obj);
+        }
+        return null;
+    }
+
+    @Override
+    public T visit(ArrayAccess a, A obj) {
+        a.getLvalue().accept(this, obj);
+        a.getIndex().accept(this, obj);
+        return null;
+    }
 }

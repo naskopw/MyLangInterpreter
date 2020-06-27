@@ -1,5 +1,15 @@
 TODO:
 	Arrays
-	Arrays in var declr
+	Arrays in var declaration
 	String literals
 	String type
+    Casting
+    Function calls
+    Return statement
+
+    Optional:
+        +=, -=
+        Structures
+        Bitwise operators
+        Module import mechanism
+

@@ -20,7 +20,7 @@ public class BlockStatement extends Statement {
 
 	@Override
 	public <T, A> T accept(TypedVisitor<T, A> v, A arg) {
-		return v.visit(this, null);
+		return v.visit(this, arg);
 	}
 
 	@Override

@@ -2,29 +2,8 @@ package interpreter.ast_visitor;
 
 import language_elements.FunctionDeclaration;
 import language_elements.TranslationUnit;
-import language_elements.expression.FuncCallExpression;
-import language_elements.expression.ArithmeticBinExpression;
-import language_elements.expression.AssignExpression;
-import language_elements.expression.BoolLiteral;
-import language_elements.expression.EqualityExpression;
-import language_elements.expression.Expression;
-import language_elements.expression.FloatLiteral;
-import language_elements.expression.IntegerLiteral;
-import language_elements.expression.LogicalExpression;
-import language_elements.expression.LogicalNotExpression;
-import language_elements.expression.PostIncrementOperation;
-import language_elements.expression.RelationalExpression;
-import language_elements.expression.VarLiteral;
-import language_elements.statement.BlockStatement;
-import language_elements.statement.BreakStatement;
-import language_elements.statement.ContinueStatement;
-import language_elements.statement.ForStatement;
-import language_elements.statement.IfStatement;
-import language_elements.statement.PrintStatement;
-import language_elements.statement.ReturnStatement;
-import language_elements.statement.Statement;
-import language_elements.statement.VarDecl;
-import language_elements.statement.WhileStatement;
+import language_elements.expression.*;
+import language_elements.statement.*;
 
 public class CommonVoidVisitor<A> implements VoidVisitor<A> {
 
@@ -149,6 +128,11 @@ public class CommonVoidVisitor<A> implements VoidVisitor<A> {
 	}
 
 	@Override
+	public void visit(StringLiteral s, A arg) {
+
+	}
+
+	@Override
 	public void visit(VarLiteral v, A arg) {
 	}
 
@@ -164,4 +148,16 @@ public class CommonVoidVisitor<A> implements VoidVisitor<A> {
 		d.getBody().accept(this, arg);
 	}
 
+	@Override
+	public void visit(ArrayDeclaration a, A arg) {
+		for(Expression e : a.getDimensions()) {
+			e.accept(this, arg);
+		}
+	}
+
+	@Override
+	public void visit(ArrayAccess a, A obj) {
+		a.getLvalue().accept(this, obj);
+		a.getIndex().accept(this, obj);
+	}
 }

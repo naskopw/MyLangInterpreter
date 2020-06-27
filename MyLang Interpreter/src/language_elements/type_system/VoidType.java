@@ -32,6 +32,16 @@ public class VoidType extends Type {
 	}
 
 	@Override
+	public boolean isCompatible(Type other) {
+		return false;
+	}
+
+	@Override
+	public boolean isArray() {
+		return false;
+	}
+
+	@Override
 	public Type relationalOperation(Type other) {
 		return null;
 	}

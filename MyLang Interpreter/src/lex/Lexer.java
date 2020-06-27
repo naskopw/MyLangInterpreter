@@ -104,6 +104,9 @@ public class Lexer {
 		case ']':
 			createToken(Token.Type.T_R_SQ_PAREN);
 			break;
+			case '\"':
+				createToken(Token.Type.T_STRING_LITERAL,parseStringLiteral());
+				break;
 		default:
 			if (Character.isDigit(c)) {
 				String numLiteral = createNumberLiteral();
@@ -125,6 +128,19 @@ public class Lexer {
 			}
 			ErrorHandler.raise(new Fatal(MessageTemplater.UnknownSymbol, stream.current()));
 		}
+	}
+
+	private String parseStringLiteral() {
+		if (stream.current() != '\"') ErrorHandler.raise(new Fatal(MessageTemplater.Expected,"\""));
+		StringBuilder buffer = new StringBuilder();
+		buffer.append(stream.current());
+		stream.next();
+		while (stream.hasNext() && !stream.current().equals('\"')) {
+			buffer.append(stream.current());
+			stream.next();
+		}
+		buffer.append(stream.current());
+		return buffer.toString();
 	}
 
 	public void scan() {

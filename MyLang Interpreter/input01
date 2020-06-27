@@ -1,12 +1,9 @@
 int main() 
 {
-    for(float i = 0.0;i<10.0;i++)
-    {
-        if (i>=4.0) println i
-    }
+    print "Hello" + " " +"Atanas"
 }
 
 int hello()
 {
-    return 0
+    return 2
 }

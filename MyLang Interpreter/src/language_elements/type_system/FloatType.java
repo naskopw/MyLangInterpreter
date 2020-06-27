@@ -56,6 +56,16 @@ public class FloatType extends Type {
 	}
 
 	@Override
+	public boolean isCompatible(Type other) {
+		return false;
+	}
+
+	@Override
+	public boolean isArray() {
+		return false;
+	}
+
+	@Override
 	public String toString() {
 		return "float";
 	}
