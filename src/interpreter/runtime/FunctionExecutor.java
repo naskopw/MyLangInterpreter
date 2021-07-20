@@ -190,7 +190,6 @@ public class FunctionExecutor extends CommonVoidVisitor<Object> {
     }
 
     public void callFunction(FuncCallExpression funcCall) {
-        System.out.println(funcCall.getArgs());
         Expression[] args = funcCall.getArgs();
 
         //compute function argument expressions

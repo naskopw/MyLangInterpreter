@@ -9,8 +9,8 @@ import language_elements.Identifier;
 public class FuncCallExpression extends Expression {
 	private static final Expression[] VOID_ARGS = new Expression[0];
 
-	private Identifier funcName;
-	private Expression[] args;
+	private final Identifier funcName;
+	private final Expression[] args;
 	private boolean isNative;
 
 	public FuncCallExpression(Identifier funcName, Collection<Expression> args) {

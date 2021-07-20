@@ -13,12 +13,10 @@ public class RuntimeEnvironment {
 	}
 
 	public void enterScope(String functionName) {
-		System.out.println("Entering scope " + functionName);
 		currentScope = functionName;
 	}
 
 	public void leaveScope(String functionName) {
-		System.out.println("Leaving scope " + functionName);
 		currentScope = null;
 	}
 

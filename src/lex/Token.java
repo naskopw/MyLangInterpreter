@@ -48,7 +48,7 @@ public class Token {
 	}
 
 	public Position getPosition() {
-		ErrorHandler.raise(new Warning("Token get position is not implemented."));
+//		ErrorHandler.raise(new Warning("Token get position is not implemented."));
 		return null;
 	}
 
