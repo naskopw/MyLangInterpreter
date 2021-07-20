@@ -1,0 +1,59 @@
+{
+  "keywords": [
+    {
+      "bool": "T_BOOL_TYPE"
+    },
+    {
+      "true": [
+        "T_BOOL_LITERAL",
+        "true"
+      ]
+    },
+    {
+      "false": [
+        "T_BOOL_LITERAL",
+        "false"
+      ]
+    },
+    {
+      "print": "T_PRINT"
+    },
+    {
+      "println": "T_PRINT_LN"
+    },
+    {
+      "break": "T_BREAK"
+    },
+    {
+      "continue": "T_CONTINUE"
+    },
+    {
+      "return": "T_RETURN"
+    },
+    {
+      "int": "T_INT_TYPE"
+    }
+    ,
+    {
+      "for": "T_FOR"
+    },
+    {
+      "while": "T_WHILE"
+    },
+    {
+      "if": "T_IF"
+    },
+    {
+      "else": "T_ELSE"
+    },
+    {
+      "float": "T_FLOAT_TYPE"
+    },
+    {
+      "void": "T_VOID_TYPE"
+    },
+    {
+      "string": "T_STRING_TYPE"
+    }
+  ]
+}

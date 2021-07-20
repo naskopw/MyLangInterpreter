@@ -1,0 +1,11 @@
+int main() 
+{
+    hello()
+}
+
+void hello()
+{
+    string hello = "Hello"
+    string user = "Atanas"
+    println hello + " " + user
+}
