@@ -1,11 +1,16 @@
 int main() 
 {
     hello()
+    int x = 4
+    if (x > 3)
+    {
+        print("X is greater than 3")
+    }
 }
 
 void hello()
 {
     string hello = "Hello"
-    string user = "Atanas"
+    string user = "Java"
     println hello + " " + user
 }
